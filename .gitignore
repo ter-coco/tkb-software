@@ -40,6 +40,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# env (keep .env.local.example tracked)
-.env*.local
