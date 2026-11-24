@@ -39,8 +39,21 @@ export default function PrivacyPage() {
       <h2 className={h2}>ระยะเวลาเก็บข้อมูล</h2>
       <p className="mt-3 text-slate-700">{site.retentionText}</p>
 
-      <h2 className={h2}>การเปิดเผยข้อมูล</h2>
-      <p className="mt-3 text-slate-700">เราไม่ขายข้อมูลของท่าน และไม่เปิดเผยแก่บุคคลอื่น</p>
+      <h2 className={h2}>การให้ข้อมูล</h2>
+      <p className="mt-3 text-slate-700">
+        การให้ข้อมูลเป็นไปโดยสมัครใจ หากท่านไม่ให้ข้อมูล ท่านจะไม่ได้รับลิงก์ดาวน์โหลดผ่านเว็บไซต์ แต่ยังติดต่อเราทาง LINE หรือโทรศัพท์ได้
+      </p>
+
+      <h2 className={h2}>ผู้ให้บริการที่ช่วยประมวลผลข้อมูล</h2>
+      <p className="mt-3 text-slate-700">
+        ข้อมูลของท่านถูกเก็บและประมวลผลโดยผู้ให้บริการ เฉพาะเพื่อให้บริการนี้ทำงานได้ ได้แก่
+      </p>
+      <ul className={ul}>
+        <li>Supabase (ฐานข้อมูล)</li>
+        <li>Vercel (โฮสต์เว็บไซต์)</li>
+        <li>LINE (แจ้งเตือนเจ้าของกิจการ)</li>
+      </ul>
+      <p className="mt-3 text-slate-700">เราไม่ขายข้อมูลของท่าน และไม่เปิดเผยเพื่อวัตถุประสงค์อื่น</p>
 
       <h2 className={h2}>สิทธิ์ของท่าน</h2>
       <p className="mt-3 text-slate-700">
@@ -49,6 +62,12 @@ export default function PrivacyPage() {
           {site.phone}
         </a>
       </p>
+
+      <h2 className={h2}>การถอนความยินยอมและการร้องเรียน</h2>
+      <ul className={ul}>
+        <li>ท่านถอนความยินยอมได้ทุกเมื่อ โดยติดต่อทาง LINE {site.lineId} หรือโทร {site.phone}</li>
+        <li>ท่านมีสิทธิ์ร้องเรียนต่อสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.)</li>
+      </ul>
     </div>
   );
 }

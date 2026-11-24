@@ -41,6 +41,7 @@ Playwright รันเซิร์ฟเวอร์ทดสอบบนพอ
 ค้นหา `TODO(ก่อนเปิดจริง)` ใน `src/config/` และตรวจรายการเหล่านี้:
 
 - `site.ts`: `companyName`, `companyAddress` (ตอนนี้ยังเป็น "รอยืนยันที่อยู่"), `siteUrl`, `consentText` (ขอบเขตแคบ ไม่รวมการเสนอขาย), `consentVersion` (เปลี่ยนทุกครั้งที่แก้ `consentText`), `retentionText` (2 ปี), `saveErrorMessage`
+- หน้า `/privacy`: ให้เจ้าของตรวจถ้อยคำ (หรือให้ผู้เชี่ยวชาญด้านกฎหมายตรวจ) ก่อนเปิดจริง
 - `products.ts`: **`trialDays` ตั้งไว้ 15 วัน ให้ตรงกับ license server** เจ้าของต้องยืนยันตัวเลขนี้อีกครั้ง
 - `products.ts` `requirements` และหน้า `/install`: เติม RAM, พื้นที่ดิสก์ และเวลาติดตั้งเมื่อวัดจากตัวติดตั้งจริง
 

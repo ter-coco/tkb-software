@@ -13,7 +13,7 @@ test("วิธีติดตั้ง", async ({ page }) => {
 
 test("นโยบายความเป็นส่วนตัว", async ({ page }) => {
   await page.goto("/privacy");
-  for (const t of ["ชื่อ", "เบอร์โทร", "085-977-4474", "@793lptfr", "2 ปี", "2026-11-25"])
+  for (const t of ["ชื่อ", "เบอร์โทร", "085-977-4474", "@793lptfr", "2 ปี", "2026-11-25", "Supabase", "Vercel", "LINE (แจ้งเตือน", "โดยสมัครใจ", "ถอนความยินยอม", "สคส."])
     await expect(page.locator("main")).toContainText(t);
 });
 
