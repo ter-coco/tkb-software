@@ -11,7 +11,6 @@ export function db(): Pool {
       max: 3,
       connectionTimeoutMillis: 5000,
       query_timeout: 5000,
-      statement_timeout: 5000,
       ssl: { rejectUnauthorized: false },
     });
     pool.on("error", (e) => console.error("pg pool error", e));
