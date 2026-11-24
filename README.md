@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TKB Software — เว็บไซต์แนะนำและดาวน์โหลดโปรแกรม
 
-## Getting Started
+Next.js 15 (App Router) + Tailwind 4 · เก็บรายชื่อผู้ดาวน์โหลดลง Postgres (Supabase) · แจ้งเตือนเข้า LINE
 
-First, run the development server:
+## วิธีรัน
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.local.example .env.local   # แล้วกรอกค่าด้านล่าง
+npm run dev        # http://localhost:3000
+npm test           # unit test (vitest)
+npm run e2e        # Playwright (build + start เองบนพอร์ต 3100)
+npx tsc --noEmit && npm run lint && npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Playwright รันเซิร์ฟเวอร์ทดสอบบนพอร์ต **3100** (ตั้งเองได้ด้วย `E2E_PORT`) เพื่อไม่ชนกับ `npm run dev` ที่พอร์ต 3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| ตัวแปร | ความหมาย |
+| --- | --- |
+| `DATABASE_URL` | Postgres ของ Supabase โปรเจกต์ TKB-License (ค่าเดียวกับ tkb-license) |
+| `LINE_CHANNEL_ACCESS_TOKEN` | Channel access token (long-lived) ของ LINE OA `@793lptfr` |
+| `LINE_NOTIFY_TO` | userId ของ KAWIN ที่จะรับแจ้งเตือน |
+| `NEXT_PUBLIC_SITE_URL` | URL ของเว็บ (ใช้ Vercel URL จนกว่าจะมีโดเมน) |
 
-## Learn More
+## วิธีเพิ่มโปรแกรมใหม่
 
-To learn more about Next.js, take a look at the following resources:
+1. เพิ่มรายการใน `src/config/products.ts` (`status: "available"` เมื่อพร้อมให้ดาวน์โหลด)
+2. ใส่ภาพหน้าจอใน `public/screenshots/<slug>/` แล้วอ้างใน `screenshots`
+3. ใส่ตัวติดตั้งใน `src/config/installers.ts` (ถ้ายังเป็น `null` ฟอร์มจะเป็นแบบ "ลงชื่อรับแจ้งเมื่อพร้อม")
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## วิธีปล่อยตัวติดตั้งรุ่นใหม่
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. สร้าง Release ใหม่ใน repo `tkb-software-releases` (tag เช่น `tkb-retail-v1.0.1`) แล้วแนบไฟล์ `.exe`
+2. แก้ `url`, `fileName`, `sizeMb` ใน `src/config/installers.ts`
+3. commit และ push ให้ Vercel deploy
 
-## Deploy on Vercel
+## ค่าที่ต้องยืนยันก่อนเปิดจริง
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+ค้นหา `TODO(ก่อนเปิดจริง)` ใน `src/config/` และตรวจรายการเหล่านี้:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `site.ts`: `companyName`, `companyAddress` (ตอนนี้ยังเป็น "รอยืนยันที่อยู่"), `siteUrl`, `consentText` (ขอบเขตแคบ ไม่รวมการเสนอขาย), `consentVersion` (เปลี่ยนทุกครั้งที่แก้ `consentText`), `retentionText` (2 ปี), `saveErrorMessage`
+- `products.ts`: **`trialDays` ตั้งไว้ 15 วัน ให้ตรงกับ license server** เจ้าของต้องยืนยันตัวเลขนี้อีกครั้ง
+- `products.ts` `requirements` และหน้า `/install`: เติม RAM, พื้นที่ดิสก์ และเวลาติดตั้งเมื่อวัดจากตัวติดตั้งจริง
+
+## ขั้นตอนเปิดเว็บจริง (เจ้าของทำเอง เป็นการเผยแพร่สู่สาธารณะ)
+
+- [ ] 1. รัน `sql/download_leads.sql` ใน Supabase โปรเจกต์ **TKB-License**
+- [ ] 2. LINE Developers: ใช้ Messaging API channel ของ LINE OA `@793lptfr` → ออก Channel access token (long-lived) และหา userId ของ KAWIN (Basic settings → Your user ID)
+- [ ] 3. สร้าง repo สาธารณะ `tkb-software-releases` → Release tag `tkb-retail-v1.0.0` → แนบ `TKB-Retail-Setup-1.0.0.exe`
+- [ ] 4. แก้ `src/config/installers.ts` แล้ว commit:
+  ```ts
+  pos: { url: "https://github.com/<owner>/tkb-software-releases/releases/download/tkb-retail-v1.0.0/TKB-Retail-Setup-1.0.0.exe", fileName: "TKB-Retail-Setup-1.0.0.exe", sizeMb: 90 }
+  ```
+  (แก้เฉพาะค่า `pos` และตรวจ `sizeMb` ให้ตรงกับไฟล์จริง)
+- [ ] 5. Vercel: สร้างโปรเจกต์ใหม่ `tkb-software-web` ใส่ env ทั้ง 4 ตัวด้านบน (`NEXT_PUBLIC_SITE_URL` = URL ของ Vercel จนกว่าจะมีโดเมน)
+- [ ] 6. ทดสอบบนเว็บจริง: กรอกฟอร์มด้วยมือถือ → ได้ลิงก์ดาวน์โหลด, มีแถวใน `download_leads`, LINE เด้งเข้า KAWIN · ดาวน์โหลดไฟล์บนคอมแล้วติดตั้งได้

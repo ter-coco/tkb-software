@@ -1,9 +1,11 @@
+import Image from "next/image";
 import { site } from "@/config/site";
 
-type Props = { trialDays: number };
+type SetupImage = { src: string; alt: string; width: number; height: number };
+type Props = { trialDays: number; setupImage?: SetupImage };
 
 /** ขั้นตอนหลังดาวน์โหลด (ตัวติดตั้งยังไม่ได้เซ็นโค้ด จึงต้องอธิบายหน้าจอเตือนของ Windows) */
-export function NextSteps({ trialDays }: Props) {
+export function NextSteps({ trialDays, setupImage }: Props) {
   const steps = [
     <>เปิดไฟล์ที่ดาวน์โหลด</>,
     <>
@@ -26,7 +28,19 @@ export function NextSteps({ trialDays }: Props) {
             <span className="grid size-7 shrink-0 place-items-center rounded-full bg-blue-600 text-sm font-bold text-white">
               {i + 1}
             </span>
-            <span className="pt-0.5">{s}</span>
+            <span className="min-w-0 pt-0.5">
+              {s}
+              {setupImage && i === 2 ? (
+                <Image
+                  src={setupImage.src}
+                  alt={setupImage.alt}
+                  width={setupImage.width}
+                  height={setupImage.height}
+                  sizes="(min-width: 768px) 640px, 100vw"
+                  className="mt-3 h-auto w-full max-w-2xl rounded-lg border border-slate-200 shadow-md shadow-slate-900/10"
+                />
+              ) : null}
+            </span>
           </li>
         ))}
       </ol>
