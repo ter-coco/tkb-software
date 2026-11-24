@@ -1,103 +1,98 @@
 import Image from "next/image";
+import Link from "next/link";
+import { Check, CirclePlay, Download } from "lucide-react";
+import { getProduct, products } from "@/config/products";
+import { ProductCard } from "@/components/ProductCard";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const pos = getProduct("pos")!;
+  const shot = pos.screenshots[0];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const highlights = [
+    `ทดลองใช้ฟรี ${pos.trialDays} วัน`,
+    "ติดตั้งบน Windows ข้อมูลอยู่ที่ร้าน",
+    "ขายได้แม้เน็ตหลุด",
+  ];
+
+  return (
+    <>
+      <section className="border-b border-slate-200 bg-gradient-to-b from-blue-50/70 to-white">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:py-20">
+          <div>
+            <p className="text-sm font-semibold text-blue-700">
+              {pos.shortName} · {pos.fullName}
+            </p>
+            <h1 className="mt-3 text-3xl leading-snug font-bold text-slate-900 sm:text-4xl lg:text-[2.75rem] lg:leading-[1.3]">
+              {/* แบ่งเป็นวลี inline-block เพื่อไม่ให้ตัดกลางคำ เช่น "ใช้ / งาน" */}
+              <span className="inline-block">โปรแกรมสำหรับ</span>
+              <span className="inline-block">เจ้าของกิจการ</span>{" "}
+              <span className="inline-block text-blue-700">ติดตั้งในเครื่อง</span>{" "}
+              <span className="inline-block text-blue-700">ใช้งานได้จริง</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-lg text-slate-600">{pos.tagline}</p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <Link
+                href="/programs/pos#download"
+                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 text-base font-semibold text-white shadow-md shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                <Download aria-hidden="true" className="size-5" />
+                ดาวน์โหลดทดลองใช้
+              </Link>
+              {pos.youtubeId ? (
+                <Link
+                  href="/programs/pos#video"
+                  className="inline-flex items-center gap-2 font-semibold text-blue-700 hover:text-blue-800"
+                >
+                  <CirclePlay aria-hidden="true" className="size-5" />
+                  ดูคลิป
+                </Link>
+              ) : null}
+            </div>
+            <ul className="mt-8 grid gap-2 text-sm text-slate-600 sm:flex sm:flex-wrap sm:gap-x-6">
+              {highlights.map((h) => (
+                <li key={h} className="flex items-center gap-2">
+                  <Check aria-hidden="true" className="size-4 shrink-0 text-blue-600" />
+                  {h}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="min-w-0">
+            <figure className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/15">
+              <div aria-hidden="true" className="flex items-center gap-2 border-b border-slate-200 bg-slate-100 px-4 py-2.5">
+                <span className="size-3 rounded-full bg-slate-300" />
+                <span className="size-3 rounded-full bg-slate-300" />
+                <span className="size-3 rounded-full bg-slate-300" />
+                <span className="ml-2 truncate text-xs font-semibold text-slate-500">
+                  {pos.shortName} — หน้าขาย
+                </span>
+              </div>
+              <Image
+                src={shot.src}
+                alt={shot.alt}
+                width={shot.width}
+                height={shot.height}
+                priority
+                sizes="(min-width: 1152px) 600px, (min-width: 1024px) 52vw, 100vw"
+                className="h-auto w-full"
+              />
+            </figure>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      <section id="programs" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">โปรแกรมของเรา</h2>
+        <p className="mt-2 max-w-2xl text-slate-600">
+          ทุกโปรแกรมติดตั้งบนเครื่อง Windows ของคุณ ดาวน์โหลดไปลองใช้ก่อน พร้อมเมื่อไรค่อยทัก LINE คุยกับเรา
+        </p>
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
+          {products.map((p) => (
+            <ProductCard key={p.slug} product={p} />
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
