@@ -53,3 +53,24 @@ test("ฐานข้อมูลพัง: 500 พร้อมข้อคว�
   expect(await handleLead(body, "", d)).toEqual({ status: 500, body: { ok: false, message: site.saveErrorMessage } });
   expect(sent).toEqual([]);
 });
+
+test("existsRecent พัง: ถือว่าไม่ซ้ำ บันทึก ส่ง LINE และให้ลิงก์", async () => {
+  const { d, inserted, sent } = deps();
+  d.repo.existsRecent = async () => { throw new Error("db"); };
+  const r = await handleLead(body, "", d);
+  expect(r.status).toBe(200); expect(r.body).toMatchObject({ mode: "download" });
+  expect(inserted).toHaveLength(1); expect(sent).toHaveLength(1);
+});
+test("userAgent ยาวเกิน 300 ถูกตัดเหลือ 300", async () => {
+  const { d, inserted } = deps();
+  await handleLead(body, "x".repeat(500), d);
+  expect(inserted[0].userAgent).toHaveLength(300);
+});
+test("โปรแกรมที่ไม่มี/ยังไม่เปิด: 400 ไม่บันทึก", async () => {
+  const { d, inserted } = deps();
+  for (const product of ["hotel", "nope"]) {
+    const r = await handleLead({ ...body, product }, "", d);
+    expect(r.status).toBe(400);
+  }
+  expect(inserted).toEqual([]);
+});

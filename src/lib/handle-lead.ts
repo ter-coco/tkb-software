@@ -36,6 +36,7 @@ export async function handleLead(
 
   if (input.website) return { status: 200, body: result };
 
+  // หมายเหตุ: การกันซ้ำ 10 นาทีไม่ atomic (check แล้วค่อย insert); ฝั่ง client กันกดซ้ำพร้อมกันอยู่แล้ว
   let recent = false;
   try {
     recent = await deps.repo.existsRecent(product.code, input.phone, DUPLICATE_WINDOW_MINUTES);
