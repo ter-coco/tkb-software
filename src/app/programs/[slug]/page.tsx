@@ -9,6 +9,8 @@ import { LineButton } from "@/components/LineButton";
 import { VideoEmbed } from "@/components/VideoEmbed";
 import { FeatureList } from "@/components/FeatureList";
 import { Screenshots } from "@/components/Screenshots";
+import { LeadForm } from "@/components/LeadForm";
+import { ShareToDesktop } from "@/components/ShareToDesktop";
 
 export const dynamicParams = false;
 
@@ -59,6 +61,7 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
             </Link>
             <LineButton label="สอบถาม / ซื้อลิขสิทธิ์" />
           </div>
+          <ShareToDesktop url={`${site.siteUrl}/programs/${slug}`} />
         </div>
       </section>
 
@@ -92,8 +95,7 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
             {ready ? `ดาวน์โหลดฟรี ทดลองใช้ ${product.trialDays} วัน` : "ลงชื่อรับแจ้งเมื่อพร้อมดาวน์โหลด"}
           </h2>
           <div className="mt-6 max-w-xl">
-            {/* Task 6 แทนที่ด้วย LeadForm (slug, productName, trialDays, ready) */}
-            <div data-testid="lead-form-slot" />
+            <LeadForm slug={slug} productName={product.fullName} trialDays={product.trialDays} ready={ready} />
           </div>
         </div>
       </section>

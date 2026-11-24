@@ -1,6 +1,9 @@
 import { getProduct } from "@/config/products";
 import { normalizeThaiPhone } from "@/lib/phone";
 
+export const NAME_REQUIRED_MESSAGE = "กรุณากรอกชื่อ";
+export const CONSENT_REQUIRED_MESSAGE = "กรุณาติ๊กยินยอมก่อนส่งข้อมูล";
+
 export type LeadField = "product" | "name" | "phone" | "consent";
 export type LeadInput = { product: string; name: string; phone: string; consent: true; website: string };
 
@@ -14,13 +17,13 @@ export function validateLead(
   if (getProduct(product)?.status !== "available") errors.product = "ไม่พบโปรแกรมนี้";
 
   const name = typeof b.name === "string" ? b.name.trim().replace(/\s+/g, " ") : "";
-  if (!name) errors.name = "กรุณากรอกชื่อ";
+  if (!name) errors.name = NAME_REQUIRED_MESSAGE;
   else if (name.length > 100) errors.name = "ชื่อยาวเกิน 100 ตัวอักษร";
 
   const phone = typeof b.phone === "string" ? normalizeThaiPhone(b.phone) : null;
   if (!phone) errors.phone = "กรุณากรอกเบอร์มือถือ 10 หลัก เช่น 081-234-5678";
 
-  if (b.consent !== true) errors.consent = "กรุณาติ๊กยินยอมก่อนส่งข้อมูล";
+  if (b.consent !== true) errors.consent = CONSENT_REQUIRED_MESSAGE;
 
   if (Object.keys(errors).length > 0 || !phone) return { ok: false, errors };
   const website = typeof b.website === "string" ? b.website : "";

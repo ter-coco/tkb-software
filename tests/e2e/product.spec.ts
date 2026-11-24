@@ -12,7 +12,7 @@ test("หน้า POS มีครบทุกส่วน", async ({ page }) =
   await expect(page.locator("#install a[href='/install']")).toBeVisible();
   await expect(page.getByRole("link", { name: /LINE/ }).first()).toBeVisible();
   await expect(page.getByRole("link", { name: "ลงชื่อรับแจ้งเมื่อพร้อม" })).toHaveAttribute("href", "#download");
-  await expect(page.getByTestId("lead-form-slot")).toHaveCount(1);
+  await expect(page.locator("#download form")).toHaveCount(1);
   await expect(page.locator("#screenshots a[target='_blank']")).toHaveCount(2);
 });
 
