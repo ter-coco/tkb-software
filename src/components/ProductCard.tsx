@@ -55,9 +55,7 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
       <h3 className="mt-5 text-xl font-bold text-slate-500">{product.shortName}</h3>
       <p className="text-sm font-semibold text-slate-500">{product.fullName}</p>
-      <p className="mt-3 flex-1 text-[15px] text-slate-500">
-        กำลังพัฒนา แอด LINE ไว้ แล้วเราจะแจ้งเมื่อเปิดให้ทดลองใช้
-      </p>
+      <p className="mt-3 flex-1 text-[15px] text-slate-500">{product.tagline}</p>
       <div className="mt-6">
         <LineButton label="แอด LINE รับแจ้งเตือน" />
       </div>

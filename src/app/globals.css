@@ -2,8 +2,9 @@
 
 @theme {
   --font-sans: var(--font-plex-thai), ui-sans-serif, system-ui, sans-serif;
-  --color-line: #06c755;
-  --color-line-dark: #05b04b;
+  /* เขียว LINE แบบเข้ม: ตัวอักษรขาวได้ contrast 5.05:1 (WCAG AA); #06C755 เดิมได้แค่ 2.26:1 */
+  --color-line: #05803a;
+  --color-line-dark: #04702f; /* hover: 6.24:1 */
 }
 
 html {
