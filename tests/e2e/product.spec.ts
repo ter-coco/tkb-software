@@ -7,7 +7,7 @@ test("หน้า POS มีครบทุกส่วน", async ({ page }) =
   for (const id of ["features", "screenshots", "download", "requirements", "install"])
     await expect(page.locator(`#${id}`)).toBeVisible();
   await expect(page.locator("#video")).toHaveCount(0); // ยังไม่มีคลิป → ซ่อน
-  await expect(page.locator("#features li")).toHaveCount(10);
+  await expect(page.locator("#features li")).toHaveCount(11);
   await expect(page.locator("#requirements")).toContainText("Windows 10");
   await expect(page.locator("#install a[href='/install']")).toBeVisible();
   await expect(page.getByRole("link", { name: /LINE/ }).first()).toBeVisible();
