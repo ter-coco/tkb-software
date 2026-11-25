@@ -43,6 +43,56 @@ export default function InstallPage() {
           );
         })}
 
+        <section id="ai" className="scroll-mt-20">
+          <h2 className={h2}>ตั้งค่า AI อ่านบิล (ไม่บังคับ)</h2>
+          <p className="mt-3 text-slate-700">
+            ใช้กับเมนู &quot;อ่านบิลซื้อจากรูป&quot; ของ TKB POS: ถ่ายรูปใบเสร็จหรือเลือกไฟล์ PDF แล้วระบบรับเข้าสต๊อกและอัปเดตต้นทุนให้
+            ไม่ตั้งค่าก็ใช้โปรแกรมส่วนอื่นได้ตามปกติ
+          </p>
+          <ol className="mt-5 grid gap-3 rounded-xl border border-slate-200 bg-white p-5">
+            {[
+              <>
+                ในโปรแกรม ไปที่เมนู <strong>ระบบ → ตั้งค่า AI อ่านบิล</strong>
+              </>,
+              <>
+                เลือกผู้ให้บริการ แนะนำ <strong>Google Gemini</strong> (สมัครด้วยบัญชี Google ได้เลย และถูกที่สุด) ·
+                OpenAI และ Claude ต้องเติมเงินในบัญชีก่อนใช้
+              </>,
+              <>
+                กด &quot;สร้าง API key ของ Google Gemini&quot; (หรือเปิด{" "}
+                <a
+                  href="https://aistudio.google.com/app/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-blue-700 underline underline-offset-2"
+                >
+                  Google AI Studio
+                </a>
+                ) แล้วคัดลอกคีย์มาวางในช่อง <strong>API key</strong>
+              </>,
+              <>ช่อง &quot;รุ่น (model)&quot; ปล่อยว่างไว้ได้ ระบบใช้รุ่นแนะนำให้เอง</>,
+              <>
+                กด <strong>ทดสอบการเชื่อมต่อ</strong> แล้วกด <strong>บันทึก</strong>
+              </>,
+              <>ลองอ่านบิลจริง 1 ใบ ถ้าแถบยอดรวมขึ้นสีเขียว แสดงว่าอ่านบิลของร้านได้แม่น</>,
+            ].map((s, i) => (
+              <li key={i} className="flex gap-3 text-slate-800">
+                <span className="grid size-7 shrink-0 place-items-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                  {i + 1}
+                </span>
+                <span className="min-w-0 pt-0.5">{s}</span>
+              </li>
+            ))}
+          </ol>
+          <ul className="mt-4 grid list-disc gap-2 pl-6 text-slate-700 marker:text-blue-600">
+            <li>
+              ค่าใช้จ่ายประมาณ <strong>1–2 บาทต่อบิล</strong> ผู้ให้บริการ AI เรียกเก็บจากร้านโดยตรง ไม่ผ่าน TKB Software
+            </li>
+            <li>ต้องต่ออินเทอร์เน็ตตอนอ่านบิล</li>
+            <li>API key เก็บแบบเข้ารหัสในเครื่องของร้าน พนักงานมองไม่เห็น</li>
+          </ul>
+        </section>
+
         <section>
           <h2 className={h2}>ใช้งานจากมือถือในร้าน</h2>
           <p className="mt-3 text-slate-700">

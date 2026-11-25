@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import type { Product } from "@/config/products";
 
@@ -10,6 +11,14 @@ export function FeatureList({ features }: { features: Product["features"] }) {
           <div>
             <h3 className="font-bold text-slate-900">{f.title}</h3>
             <p className="mt-1 text-[15px] text-slate-600">{f.detail}</p>
+            {f.link ? (
+              <Link
+                href={f.link.href}
+                className="mt-2 inline-block py-1 text-sm font-semibold text-blue-700 underline-offset-2 hover:underline"
+              >
+                {f.link.label} →
+              </Link>
+            ) : null}
           </div>
         </li>
       ))}
