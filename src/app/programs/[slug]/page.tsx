@@ -61,7 +61,10 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
             </Link>
             <LineButton label="สอบถาม / ซื้อลิขสิทธิ์" />
           </div>
-          <ShareToDesktop url={`${site.siteUrl}/programs/${slug}`} />
+          <ShareToDesktop
+            url={`${site.siteUrl}/programs/${slug}`}
+            hint="เปิดจากมือถือ? ส่งลิงก์ไปเปิดบนคอมพิวเตอร์"
+          />
         </div>
       </section>
 
@@ -110,7 +113,7 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
       </section>
 
       <section id="install" className={`${section} border-t border-slate-200`}>
-        <h2 className={h2}>ติดตั้งง่ายใน 3 ขั้นตอน</h2>
+        <h2 className={h2}>ติดตั้งง่ายใน {installSteps.length} ขั้นตอน</h2>
         <ol className="mt-6 grid max-w-3xl gap-3">
           {installSteps.map((s, i) => (
             <li key={s} className="flex items-center gap-4 text-slate-800">

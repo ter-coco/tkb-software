@@ -26,7 +26,7 @@ export function SiteHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="font-semibold text-slate-600 transition-colors hover:text-blue-700"
+                  className="inline-block py-2.5 font-semibold text-slate-600 transition-colors hover:text-blue-700"
                 >
                   {item.label}
                 </Link>

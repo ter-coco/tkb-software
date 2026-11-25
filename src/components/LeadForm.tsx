@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Download, BellRing } from "lucide-react";
 import { site } from "@/config/site";
@@ -30,6 +30,12 @@ export function LeadForm({ slug, productName, trialDays, ready }: Props) {
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState<Done | null>(null);
   const sending = useRef(false);
+  const doneRef = useRef<HTMLDivElement>(null);
+
+  // ฟอร์มถูกแทนที่ด้วยผลลัพธ์: เลื่อนให้เห็นหัวข้อ ไม่ให้ตกอยู่หลังเฮดเดอร์
+  useEffect(() => {
+    if (done) doneRef.current?.scrollIntoView({ block: "start" });
+  }, [done]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -69,23 +75,35 @@ export function LeadForm({ slug, productName, trialDays, ready }: Props) {
   }
 
   if (done?.mode === "download") {
+    const shareText = `ดาวน์โหลดโปรแกรม ${productName} (ใช้กับคอมพิวเตอร์ Windows): ${done.downloadUrl}
+วิธีติดตั้ง: ${site.siteUrl}/install`;
     return (
-      <div className="grid gap-5">
-        <div>
+      <div ref={doneRef} role="status" className="flex scroll-mt-20 flex-col gap-5">
+        {/* มือถือ: ส่งลิงก์ไปเปิดบนคอมเป็นปุ่มหลัก (ไฟล์เป็น .exe ใช้บนมือถือไม่ได้) */}
+        <div className="order-1 md:hidden">
+          <p className="text-base font-bold text-slate-900">
+            ไฟล์นี้ใช้กับคอมพิวเตอร์ Windows — ส่งลิงก์ไปเปิดบนคอม
+          </p>
+          <ShareToDesktop
+            url={done.downloadUrl}
+            text={shareText}
+            inputLabel="ลิงก์ดาวน์โหลดและวิธีติดตั้ง"
+            className="mt-3"
+          />
+        </div>
+        <div className="order-2 md:order-1">
           <a
             href={done.downloadUrl}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-5 text-lg font-bold text-white shadow-md shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:rounded-xl md:border-0 md:bg-blue-600 md:px-6 md:py-5 md:text-lg md:font-bold md:text-white md:shadow-md md:shadow-blue-600/25 md:hover:bg-blue-700"
           >
-            <Download aria-hidden="true" className="size-6" />
-            ดาวน์โหลดไฟล์ติดตั้ง ({done.sizeMb} MB)
+            <Download aria-hidden="true" className="size-5 md:size-6" />
+            ดาวน์โหลดไฟล์ติดตั้ง (Windows PC, {done.sizeMb} MB)
           </a>
           <p className="mt-2 text-sm text-slate-600">ไฟล์: {done.fileName} · ใช้กับ Windows เท่านั้น</p>
         </div>
-        <div className="md:hidden">
-          <p className="text-sm font-semibold text-slate-800">กำลังเปิดจากมือถือ? ส่งลิงก์นี้ไปเปิดบนคอมพิวเตอร์</p>
-          <ShareToDesktop url={done.downloadUrl} />
+        <div className="order-3">
+          <NextSteps trialDays={trialDays} />
         </div>
-        <NextSteps trialDays={trialDays} />
       </div>
     );
   }

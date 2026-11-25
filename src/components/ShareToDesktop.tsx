@@ -2,13 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Props = { url: string };
+type Props = {
+  /** ลิงก์หลัก (ใช้เป็นข้อความที่ส่ง ถ้าไม่ระบุ text) */
+  url: string;
+  /** ข้อความที่คัดลอก/ส่งเข้า LINE (เช่น ลิงก์ดาวน์โหลด + ลิงก์วิธีติดตั้ง) */
+  text?: string;
+  /** ป้ายของช่องคัดลอกเอง */
+  inputLabel?: string;
+  /** ข้อความแนะนำเหนือปุ่ม */
+  hint?: string;
+  className?: string;
+};
 
 /** ส่งลิงก์จากมือถือไปเปิดบนคอม: คัดลอก หรือส่งเข้า LINE (แสดงเฉพาะมือถือ) */
-export function ShareToDesktop({ url }: Props) {
+export function ShareToDesktop({ url, text, inputLabel = "ลิงก์หน้านี้", hint, className = "mt-4" }: Props) {
+  const shareText = text ?? url;
   const [copied, setCopied] = useState(false);
   const [manual, setManual] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -19,7 +30,7 @@ export function ShareToDesktop({ url }: Props) {
   async function copy() {
     try {
       if (!navigator.clipboard) throw new Error("no clipboard");
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(shareText);
       setManual(false);
       setCopied(true);
       clearTimeout(timer.current);
@@ -34,13 +45,14 @@ export function ShareToDesktop({ url }: Props) {
     "inline-flex items-center justify-center rounded-lg border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600";
 
   return (
-    <div className="mt-4 md:hidden">
+    <div className={`${className} md:hidden`}>
+      {hint ? <p className="mb-3 text-sm font-semibold text-slate-800">{hint}</p> : null}
       <div className="flex flex-wrap items-center gap-3">
         <button type="button" onClick={copy} className={btn}>
           คัดลอกลิงก์
         </button>
         <a
-          href={`https://line.me/R/share?text=${encodeURIComponent(url)}`}
+          href={`https://line.me/R/share?text=${encodeURIComponent(shareText)}`}
           target="_blank"
           rel="noopener noreferrer"
           className={btn}
@@ -52,11 +64,12 @@ export function ShareToDesktop({ url }: Props) {
         </span>
       </div>
       {manual ? (
-        <input
+        <textarea
           ref={inputRef}
           readOnly
-          aria-label="ลิงก์หน้านี้"
-          value={url}
+          rows={shareText === url ? 1 : 4}
+          aria-label={inputLabel}
+          value={shareText}
           onFocus={(e) => e.currentTarget.select()}
           className="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
         />

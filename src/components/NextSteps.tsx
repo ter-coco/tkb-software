@@ -7,10 +7,15 @@ type Props = { trialDays: number; setupImage?: SetupImage };
 /** ขั้นตอนหลังดาวน์โหลด (ตัวติดตั้งยังไม่ได้เซ็นโค้ด จึงต้องอธิบายหน้าจอเตือนของ Windows) */
 export function NextSteps({ trialDays, setupImage }: Props) {
   const steps = [
+    <>
+      ถ้าเบราว์เซอร์ขึ้นเตือนว่า &quot;ไม่ได้ดาวน์โหลดโดยทั่วไป&quot; (Edge/Chrome) ให้กดจุดสามจุด <strong>•••</strong> →{" "}
+      <strong>เก็บไว้ (Keep)</strong> → <strong>เก็บไว้ต่อไป (Keep anyway)</strong>
+    </>,
     <>เปิดไฟล์ที่ดาวน์โหลด</>,
     <>
-      ถ้า Windows ขึ้น &quot;Windows protected your PC&quot; ให้กด <strong>More info</strong> แล้วกด{" "}
-      <strong>Run anyway</strong> (ตัวติดตั้งยังไม่ได้เซ็นโค้ด)
+      ถ้า Windows ขึ้น &quot;Windows ปกป้องพีซีของคุณ (Windows protected your PC)&quot; ให้กด{" "}
+      <strong>ข้อมูลเพิ่มเติม (More info)</strong> แล้วกด <strong>เรียกใช้ต่อไป (Run anyway)</strong>{" "}
+      (ตัวติดตั้งยังไม่ได้เซ็นโค้ด)
     </>,
     <>
       ติดตั้งเสร็จ เปิด &quot;เปิดโปรแกรม&quot; จากเมนู Start → ตั้งค่าร้านครั้งแรก → กดเริ่มทดลองใช้ {trialDays} วัน
@@ -30,7 +35,7 @@ export function NextSteps({ trialDays, setupImage }: Props) {
             </span>
             <span className="min-w-0 pt-0.5">
               {s}
-              {setupImage && i === 2 ? (
+              {setupImage && i === 3 ? (
                 <Image
                   src={setupImage.src}
                   alt={setupImage.alt}
