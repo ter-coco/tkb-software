@@ -11,7 +11,8 @@ test("หน้า POS มีครบทุกส่วน", async ({ page }) =
   await expect(page.locator("#requirements")).toContainText("Windows 10");
   await expect(page.locator("#install a[href='/install']")).toBeVisible();
   await expect(page.getByRole("link", { name: /LINE/ }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: "ลงชื่อรับแจ้งเมื่อพร้อม" })).toHaveAttribute("href", "#download");
+  // installers.ts มีตัวติดตั้ง POS แล้ว → ปุ่มหัวหน้าเป็นโหมดดาวน์โหลด
+  await expect(page.getByRole("link", { name: "ดาวน์โหลดฟรี ทดลองใช้ 15 วัน" })).toHaveAttribute("href", "#download");
   await expect(page.locator("#download form")).toHaveCount(1);
   await expect(page.locator("#screenshots a[target='_blank']")).toHaveCount(2);
 });
