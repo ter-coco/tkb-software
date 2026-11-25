@@ -2,8 +2,18 @@ import type { NewLead } from "@/lib/leads-repo";
 import { formatThaiPhone } from "@/lib/phone";
 import { formatThaiDateTime } from "@/lib/datetime";
 
-export function formatLeadMessage(lead: NewLead, shortName: string, at: Date): string {
-  const title = lead.kind === "download" ? "🔔 มีคนดาวน์โหลดทดลองใช้" : "🔔 ลงชื่อรับแจ้งเมื่อพร้อม";
+export function formatLeadMessage(
+  lead: NewLead,
+  shortName: string,
+  at: Date,
+  opts: { cloud?: boolean } = {},
+): string {
+  const title =
+    lead.kind === "notify"
+      ? "🔔 ลงชื่อรับแจ้งเมื่อพร้อม"
+      : opts.cloud
+        ? "🔔 มีคนไปสมัครทดลองใช้"
+        : "🔔 มีคนดาวน์โหลดทดลองใช้";
   return [
     title,
     `โปรแกรม: ${shortName}`,

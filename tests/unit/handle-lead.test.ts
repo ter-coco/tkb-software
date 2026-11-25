@@ -21,6 +21,13 @@ test("พร้อมดาวน์โหลด: บันทึก kind=downlo
   expect(inserted).toEqual([{ product: "tkb-retail", name: "สมชาย", phone: "0859774474", kind: "download", consentVersion: site.consentVersion, userAgent: "UA" }]);
   expect(sent).toHaveLength(1);
 });
+test("ระบบคลาวด์ (FaceScan): คืนลิงก์หน้าสมัคร บันทึก kind=download ข้อความ LINE ว่าไปสมัคร", async () => {
+  const { d, inserted, sent } = deps();
+  const r = await handleLead({ ...body, product: "facescan" }, "", d);
+  expect(r).toEqual({ status: 200, body: { ok: true, mode: "signup", signupUrl: "https://facescan.tkbcon.com/signup" } });
+  expect(inserted[0]).toMatchObject({ product: "tkb-facescan", kind: "download" });
+  expect(sent[0]).toMatch(/^🔔 มีคนไปสมัครทดลองใช้\nโปรแกรม: TKB FaceScan\n/);
+});
 test("ยังไม่มีตัวติดตั้ง: kind=notify ไม่มีลิงก์", async () => {
   const { d, inserted } = deps({ installer: () => null });
   expect((await handleLead(body, "", d)).body).toEqual({ ok: true, mode: "notify" });

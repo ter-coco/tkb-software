@@ -13,6 +13,7 @@ export type LeadDeps = {
 
 export type LeadResponse =
   | { ok: true; mode: "download"; downloadUrl: string; fileName: string; sizeMb: number }
+  | { ok: true; mode: "signup"; signupUrl: string }
   | { ok: true; mode: "notify" }
   | { ok: false; errors?: Partial<Record<LeadField, string>>; message?: string };
 
@@ -29,10 +30,15 @@ export async function handleLead(
   const product = getProduct(input.product);
   if (!product) return { status: 400, body: { ok: false, errors: { product: "ไม่พบโปรแกรมนี้" } } };
 
-  const inst = deps.installer(input.product);
+  const cloud = product.delivery === "cloud";
+  const inst = cloud ? null : deps.installer(input.product);
+  const signupUrl = cloud ? product.signupUrl : undefined;
   const result: LeadResponse = inst
     ? { ok: true, mode: "download", downloadUrl: inst.url, fileName: inst.fileName, sizeMb: inst.sizeMb }
-    : { ok: true, mode: "notify" };
+    : signupUrl
+      ? { ok: true, mode: "signup", signupUrl }
+      : { ok: true, mode: "notify" };
+  const gotTrial = Boolean(inst || signupUrl);
 
   if (input.website) return { status: 200, body: result };
 
@@ -49,7 +55,8 @@ export async function handleLead(
     product: product.code,
     name: input.name,
     phone: input.phone,
-    kind: inst ? "download" : "notify",
+    // "download" = ได้ทางไปทดลองใช้แล้ว (ลิงก์ติดตั้ง หรือหน้าสมัครของระบบคลาวด์)
+    kind: gotTrial ? "download" : "notify",
     consentVersion: site.consentVersion,
     userAgent: userAgent.slice(0, 300),
   };
@@ -61,7 +68,7 @@ export async function handleLead(
   }
 
   try {
-    await deps.notify(formatLeadMessage(lead, product.shortName, deps.now()));
+    await deps.notify(formatLeadMessage(lead, product.shortName, deps.now(), { cloud }));
   } catch (e) {
     console.error("LINE notify failed", e);
   }

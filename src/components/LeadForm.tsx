@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Download, BellRing } from "lucide-react";
+import { Download, BellRing, Rocket } from "lucide-react";
 import { site } from "@/config/site";
 import { CONSENT_REQUIRED_MESSAGE, NAME_REQUIRED_MESSAGE, type LeadField } from "@/lib/lead";
 import type { LeadResponse } from "@/lib/handle-lead";
@@ -10,17 +10,27 @@ import { LineButton } from "@/components/LineButton";
 import { NextSteps } from "@/components/NextSteps";
 import { ShareToDesktop } from "@/components/ShareToDesktop";
 
-type Props = { slug: string; productName: string; trialDays: number; ready: boolean };
+type Props = {
+  slug: string;
+  productName: string;
+  trialDays: number;
+  ready: boolean;
+  /** ระบบคลาวด์: ปุ่มเป็น "สมัครทดลองใช้" และหลังส่งพาไปหน้าสมัคร */
+  cloud?: boolean;
+  /** ขั้นตอนเริ่มใช้งาน (แสดงหลังส่งฟอร์มของระบบคลาวด์) */
+  steps?: string[];
+};
 type Errors = Partial<Record<LeadField, string>>;
 type Done =
   | { mode: "download"; downloadUrl: string; fileName: string; sizeMb: number }
+  | { mode: "signup"; signupUrl: string }
   | { mode: "notify" };
 
 const inputCls =
   "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 aria-[invalid=true]:border-red-600";
 const errCls = "mt-1 text-sm font-medium text-red-700";
 
-export function LeadForm({ slug, productName, trialDays, ready }: Props) {
+export function LeadForm({ slug, productName, trialDays, ready, cloud = false, steps = [] }: Props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
@@ -61,7 +71,7 @@ export function LeadForm({ slug, productName, trialDays, ready }: Props) {
       });
       const data = (await res.json()) as LeadResponse;
       if (data.ok) {
-        setDone(data.mode === "download" ? data : { mode: "notify" });
+        setDone(data);
       } else {
         setErrors(data.errors ?? {});
         if (data.message || !data.errors) setFormError(data.message ?? site.saveErrorMessage);
@@ -104,6 +114,38 @@ export function LeadForm({ slug, productName, trialDays, ready }: Props) {
         <div className="order-3">
           <NextSteps trialDays={trialDays} />
         </div>
+      </div>
+    );
+  }
+
+  if (done?.mode === "signup") {
+    return (
+      <div ref={doneRef} role="status" className="grid scroll-mt-20 gap-5 rounded-xl border border-green-200 bg-white p-6">
+        <p className="text-lg font-semibold text-slate-900">
+          ขอบคุณครับ ไปสมัครบัญชีบริษัทแล้วเริ่มทดลองใช้ฟรี {trialDays} วันได้ทันที
+        </p>
+        <a
+          href={done.signupUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-lg font-bold text-white shadow-md shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
+          <Rocket aria-hidden="true" className="size-6" />
+          ไปหน้าสมัครทดลองใช้
+        </a>
+        {steps.length > 0 ? (
+          <ol className="grid gap-3">
+            {steps.map((s, i) => (
+              <li key={s} className="flex gap-3 text-slate-800">
+                <span className="grid size-7 shrink-0 place-items-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                  {i + 1}
+                </span>
+                <span className="pt-0.5">{s}</span>
+              </li>
+            ))}
+          </ol>
+        ) : null}
+        <p className="text-sm text-slate-600">ติดขัดตรงไหน แอด LINE {site.lineId} หรือโทร {site.phone}</p>
       </div>
     );
   }
@@ -231,12 +273,18 @@ export function LeadForm({ slug, productName, trialDays, ready }: Props) {
             "กำลังส่ง…"
           ) : (
             <>
-              {ready ? (
-                <Download aria-hidden="true" className="size-5" />
-              ) : (
+              {!ready ? (
                 <BellRing aria-hidden="true" className="size-5" />
+              ) : cloud ? (
+                <Rocket aria-hidden="true" className="size-5" />
+              ) : (
+                <Download aria-hidden="true" className="size-5" />
               )}
-              {ready ? `ดาวน์โหลดฟรี ทดลองใช้ ${trialDays} วัน` : "ลงชื่อรับแจ้งเมื่อพร้อม"}
+              {!ready
+                ? "ลงชื่อรับแจ้งเมื่อพร้อม"
+                : cloud
+                  ? `สมัครทดลองใช้ฟรี ${trialDays} วัน`
+                  : `ดาวน์โหลดฟรี ทดลองใช้ ${trialDays} วัน`}
             </>
           )}
         </button>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Download, BellRing, Phone } from "lucide-react";
+import { Download, BellRing, Phone, Rocket } from "lucide-react";
 import { availableProducts, getProduct } from "@/config/products";
 import { getInstaller } from "@/config/installers";
 import { site } from "@/config/site";
@@ -32,8 +32,13 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
   const product = getProduct(slug);
   if (!product || product.status !== "available") notFound();
 
-  const ready = getInstaller(slug) !== null;
   const cloud = product.delivery === "cloud";
+  const ready = cloud ? Boolean(product.signupUrl) : getInstaller(slug) !== null;
+  const ctaLabel = !ready
+    ? "ลงชื่อรับแจ้งเมื่อพร้อม"
+    : cloud
+      ? `ทดลองใช้ฟรี ${product.trialDays} วัน`
+      : `ดาวน์โหลดฟรี ทดลองใช้ ${product.trialDays} วัน`;
   const steps = product.startSteps;
   const h2 = "text-2xl font-bold text-slate-900 sm:text-3xl";
   const section = "mx-auto max-w-6xl scroll-mt-20 px-4 py-12 sm:px-6";
@@ -52,12 +57,14 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
               href="#download"
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 text-base font-semibold text-white shadow-md shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
-              {ready ? (
-                <Download aria-hidden="true" className="size-5" />
-              ) : (
+              {!ready ? (
                 <BellRing aria-hidden="true" className="size-5" />
+              ) : cloud ? (
+                <Rocket aria-hidden="true" className="size-5" />
+              ) : (
+                <Download aria-hidden="true" className="size-5" />
               )}
-              {ready ? `ดาวน์โหลดฟรี ทดลองใช้ ${product.trialDays} วัน` : "ลงชื่อรับแจ้งเมื่อพร้อม"}
+              {ctaLabel}
             </Link>
             <LineButton label="สอบถาม / ซื้อลิขสิทธิ์" />
           </div>
@@ -100,13 +107,22 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <h2 className={h2}>
             {ready
-              ? `ดาวน์โหลดฟรี ทดลองใช้ ${product.trialDays} วัน`
+              ? cloud
+                ? `สมัครทดลองใช้ฟรี ${product.trialDays} วัน`
+                : `ดาวน์โหลดฟรี ทดลองใช้ ${product.trialDays} วัน`
               : cloud
                 ? "ลงชื่อรับแจ้งเมื่อเปิดให้ทดลองใช้"
                 : "ลงชื่อรับแจ้งเมื่อพร้อมดาวน์โหลด"}
           </h2>
           <div className="mt-6 max-w-xl">
-            <LeadForm slug={slug} productName={product.fullName} trialDays={product.trialDays} ready={ready} />
+            <LeadForm
+              slug={slug}
+              productName={product.fullName}
+              trialDays={product.trialDays}
+              ready={ready}
+              cloud={cloud}
+              steps={product.startSteps}
+            />
           </div>
         </div>
       </section>

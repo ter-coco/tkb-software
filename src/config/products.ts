@@ -14,6 +14,8 @@ export type Product = {
   requirements: string[];
   /** desktop = ดาวน์โหลดตัวติดตั้งลง Windows · cloud = ใช้งานผ่านเว็บ ไม่ต้องติดตั้ง (ไม่ใส่ = desktop) */
   delivery?: "desktop" | "cloud";
+  /** cloud: หน้าสมัครทดลองใช้ (ใส่แล้ว = เปิดให้ทดลอง · ไม่ใส่ = โหมดลงชื่อรับแจ้ง) */
+  signupUrl?: string;
   /** ขั้นตอนเริ่มใช้งานแบบสั้นในหน้ารายละเอียด */
   startSteps: string[];
 };
@@ -55,8 +57,9 @@ export const products: Product[] = [
     startSteps: ["ดาวน์โหลดไฟล์ติดตั้ง", "ติดตั้งลงเครื่อง Windows", "เปิดโปรแกรมแล้วเริ่มทดลองใช้"],
   },
   {
-    // ที่มา: C:\dev\tkb-facescan (README, PLAN.md, src/modules/hr) · ยังไม่ deploy (APP_URL ว่าง) → หน้าเว็บเป็นโหมดลงชื่อรับแจ้ง
+    // ที่มา: C:\dev\tkb-facescan (README, PLAN.md, src/modules/hr) · ระบบจริงอยู่ที่ facescan.tkbcon.com
     slug: "facescan",
+    signupUrl: "https://facescan.tkbcon.com/signup",
     code: "tkb-facescan",
     fullName: "ระบบสแกนหน้าลงเวลาพนักงาน",
     shortName: "TKB FaceScan",
