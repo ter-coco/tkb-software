@@ -112,7 +112,7 @@ export function LeadForm({ slug, productName, trialDays, ready }: Props) {
     return (
       <div className="rounded-xl border border-green-200 bg-white p-6" role="status">
         <p className="text-lg font-semibold text-slate-900">
-          ลงชื่อเรียบร้อย เราจะติดต่อกลับทางเบอร์ที่ให้ไว้เมื่อโปรแกรมพร้อมดาวน์โหลด
+          ลงชื่อเรียบร้อย เราจะติดต่อกลับทางเบอร์ที่ให้ไว้เมื่อโปรแกรมพร้อมให้ทดลองใช้
         </p>
         <div className="mt-4">
           <LineButton />

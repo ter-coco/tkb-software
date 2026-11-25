@@ -18,6 +18,24 @@ test("หน้า POS มีครบทุกส่วน", async ({ page }) =
   await expect(page.locator("#screenshots a[target='_blank']")).toHaveCount(2);
 });
 
+test("หน้า FaceScan: ระบบคลาวด์ ลงชื่อรับแจ้ง ไม่มีขั้นตอน Windows", async ({ page }) => {
+  await page.goto("/programs/facescan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("ระบบสแกนหน้าลงเวลาพนักงาน");
+  await expect(page.locator("#features li")).toHaveCount(10);
+  await expect(page.locator("#screenshots")).toHaveCount(0); // ยังไม่มีภาพ → ซ่อน
+  await expect(page.getByRole("link", { name: "ลงชื่อรับแจ้งเมื่อพร้อม" })).toHaveAttribute("href", "#download");
+  await expect(page.locator("#download")).toContainText("ลงชื่อรับแจ้งเมื่อเปิดให้ทดลองใช้");
+  await expect(page.locator("#install")).toContainText("เริ่มใช้งานใน 3 ขั้นตอน");
+  await expect(page.locator("#install a[href='/install']")).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText("Windows");
+});
+
+test("หน้า /install แสดงเฉพาะโปรแกรมที่ต้องติดตั้ง", async ({ page }) => {
+  await page.goto("/install");
+  await expect(page.locator("#facescan")).toHaveCount(0);
+  await expect(page.locator("#pos")).toHaveCount(1);
+});
+
 test("ไม่มีแนวนอนล้นจอ", async ({ page }) => {
   await page.goto("/programs/pos");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

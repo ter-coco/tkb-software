@@ -10,17 +10,20 @@ test("code ตรงกับรูปแบบรหัสของ license-ser
 test("โปรแกรมตอนเปิดเว็บ", () => {
   expect(products.map(p => [p.slug, p.code, p.status])).toEqual([
     ["pos", "tkb-retail", "available"],
+    ["facescan", "tkb-facescan", "available"],
     ["hotel", "tkb-hotel", "coming-soon"],
-    ["hr", "tkb-hr", "coming-soon"],
   ]);
   expect(getProduct("pos")?.fullName).toBe("โปรแกรมร้านค้าปลีก-ขายส่งครบวงจร");
   expect(getProduct("pos")?.trialDays).toBe(15);
+  expect(getProduct("facescan")?.fullName).toBe("ระบบสแกนหน้าลงเวลาพนักงาน");
+  expect(getProduct("facescan")?.delivery).toBe("cloud");
   expect(getProduct("nope")).toBeUndefined();
-  expect(availableProducts().map(p => p.slug)).toEqual(["pos"]);
+  expect(availableProducts().map(p => p.slug)).toEqual(["pos", "facescan"]);
 });
 test("โปรแกรมพร้อมใช้มีจุดเด่นอย่างน้อย 6 ข้อ และภาพหน้าจอมี alt", () => {
   for (const p of availableProducts()) {
     expect(p.features.length).toBeGreaterThanOrEqual(6);
     for (const s of p.screenshots) expect(s.alt.length).toBeGreaterThan(0);
+    expect(p.startSteps.length).toBeGreaterThan(0);
   }
 });

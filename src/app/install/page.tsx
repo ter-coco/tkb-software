@@ -25,7 +25,9 @@ export default function InstallPage() {
       </section>
 
       <div className="mx-auto grid max-w-4xl gap-14 px-4 py-12 sm:px-6">
-        {availableProducts().map((p) => {
+        {availableProducts()
+          .filter((p) => p.delivery !== "cloud")
+          .map((p) => {
           const setup = p.screenshots.find((s) => s.src.endsWith("/setup.png"));
           return (
             <section key={p.slug} id={p.slug} className="scroll-mt-20">

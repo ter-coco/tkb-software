@@ -13,7 +13,7 @@ const plexThai = IBM_Plex_Sans_Thai({
 });
 
 const description =
-  "โปรแกรมสำหรับเจ้าของกิจการ ติดตั้งในเครื่อง Windows ใช้งานได้จริง ดาวน์โหลดไปทดลองใช้ฟรี";
+  "โปรแกรมสำหรับเจ้าของกิจการ ร้านค้า POS สแกนหน้าลงเวลา และอีกมากมาย ใช้งานได้จริง ทดลองใช้ฟรี";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.siteUrl),

@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, BedDouble, ShoppingCart, UserRoundCheck, type LucideIcon } from "lucide-react";
+import { ArrowRight, BedDouble, ScanFace, ShoppingCart, type LucideIcon } from "lucide-react";
 import type { Product } from "@/config/products";
 import { LineButton } from "./LineButton";
 
 const icons: Record<string, LucideIcon> = {
   pos: ShoppingCart,
   hotel: BedDouble,
-  hr: UserRoundCheck,
+  facescan: ScanFace,
 };
 
 export function ProductCard({ product }: { product: Product }) {

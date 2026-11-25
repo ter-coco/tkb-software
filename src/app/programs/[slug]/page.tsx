@@ -27,14 +27,14 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return { title: product.fullName, description: product.tagline };
 }
 
-const installSteps = ["ดาวน์โหลดไฟล์ติดตั้ง", "ติดตั้งลงเครื่อง Windows", "เปิดโปรแกรมแล้วเริ่มทดลองใช้"];
-
 export default async function ProgramPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product || product.status !== "available") notFound();
 
   const ready = getInstaller(slug) !== null;
+  const cloud = product.delivery === "cloud";
+  const steps = product.startSteps;
   const h2 = "text-2xl font-bold text-slate-900 sm:text-3xl";
   const section = "mx-auto max-w-6xl scroll-mt-20 px-4 py-12 sm:px-6";
 
@@ -61,10 +61,12 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
             </Link>
             <LineButton label="สอบถาม / ซื้อลิขสิทธิ์" />
           </div>
-          <ShareToDesktop
-            url={`${site.siteUrl}/programs/${slug}`}
-            hint="เปิดจากมือถือ? ส่งลิงก์ไปเปิดบนคอมพิวเตอร์"
-          />
+          {cloud ? null : (
+            <ShareToDesktop
+              url={`${site.siteUrl}/programs/${slug}`}
+              hint="เปิดจากมือถือ? ส่งลิงก์ไปเปิดบนคอมพิวเตอร์"
+            />
+          )}
         </div>
       </section>
 
@@ -84,18 +86,24 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
         </div>
       </section>
 
-      <section id="screenshots" className={`${section} border-t border-slate-200`}>
-        <h2 className={h2}>หน้าตาโปรแกรม</h2>
-        <p className="mt-2 text-slate-600">คลิกที่ภาพเพื่อดูขนาดเต็ม</p>
-        <div className="mt-6">
-          <Screenshots screenshots={product.screenshots} />
-        </div>
-      </section>
+      {product.screenshots.length > 0 ? (
+        <section id="screenshots" className={`${section} border-t border-slate-200`}>
+          <h2 className={h2}>หน้าตาโปรแกรม</h2>
+          <p className="mt-2 text-slate-600">คลิกที่ภาพเพื่อดูขนาดเต็ม</p>
+          <div className="mt-6">
+            <Screenshots screenshots={product.screenshots} />
+          </div>
+        </section>
+      ) : null}
 
       <section id="download" className="scroll-mt-20 border-y border-blue-100 bg-blue-50/60">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <h2 className={h2}>
-            {ready ? `ดาวน์โหลดฟรี ทดลองใช้ ${product.trialDays} วัน` : "ลงชื่อรับแจ้งเมื่อพร้อมดาวน์โหลด"}
+            {ready
+              ? `ดาวน์โหลดฟรี ทดลองใช้ ${product.trialDays} วัน`
+              : cloud
+                ? "ลงชื่อรับแจ้งเมื่อเปิดให้ทดลองใช้"
+                : "ลงชื่อรับแจ้งเมื่อพร้อมดาวน์โหลด"}
           </h2>
           <div className="mt-6 max-w-xl">
             <LeadForm slug={slug} productName={product.fullName} trialDays={product.trialDays} ready={ready} />
@@ -113,9 +121,11 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
       </section>
 
       <section id="install" className={`${section} border-t border-slate-200`}>
-        <h2 className={h2}>ติดตั้งง่ายใน {installSteps.length} ขั้นตอน</h2>
+        <h2 className={h2}>
+          {cloud ? "เริ่มใช้งาน" : "ติดตั้งง่าย"}ใน {steps.length} ขั้นตอน
+        </h2>
         <ol className="mt-6 grid max-w-3xl gap-3">
-          {installSteps.map((s, i) => (
+          {steps.map((s, i) => (
             <li key={s} className="flex items-center gap-4 text-slate-800">
               <span className="grid size-9 shrink-0 place-items-center rounded-full bg-blue-600 font-bold text-white">
                 {i + 1}
@@ -124,9 +134,13 @@ export default async function ProgramPage({ params }: { params: Promise<Params> 
             </li>
           ))}
         </ol>
-        <Link href="/install" className="mt-6 inline-block font-semibold text-blue-700 hover:text-blue-800">
-          ดูวิธีติดตั้งแบบละเอียด
-        </Link>
+        {cloud ? (
+          <p className="mt-6 max-w-3xl text-slate-600">ไม่ต้องติดตั้งโปรแกรม ใช้งานผ่านเว็บเบราว์เซอร์ได้ทันที</p>
+        ) : (
+          <Link href="/install" className="mt-6 inline-block font-semibold text-blue-700 hover:text-blue-800">
+            ดูวิธีติดตั้งแบบละเอียด
+          </Link>
+        )}
       </section>
 
       <section className="border-t border-slate-200 bg-slate-50">

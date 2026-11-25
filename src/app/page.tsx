@@ -85,7 +85,7 @@ export default function Home() {
       <section id="programs" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">โปรแกรมของเรา</h2>
         <p className="mt-2 max-w-2xl text-slate-600">
-          ทุกโปรแกรมติดตั้งบนเครื่อง Windows ของคุณ ดาวน์โหลดไปลองใช้ก่อน พร้อมเมื่อไรค่อยทัก LINE คุยกับเรา
+          ทุกโปรแกรมทดลองใช้ฟรีก่อน มีทั้งแบบติดตั้งในเครื่อง Windows และแบบใช้งานบนคลาวด์ พร้อมเมื่อไรค่อยทัก LINE คุยกับเรา
         </p>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           {products.map((p) => (
