@@ -57,5 +57,5 @@ test("ไม่มีแนวนอนล้นจอ", async ({ page }) => {
 
 test("TKB Hotel เปิดหน้ารายละเอียดแบบคลาวด์", async ({ page }) => {
   expect((await page.goto("/programs/hotel"))?.status()).toBe(200);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("ระบบบริหารจัดการโรงแรมครบวงจร");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("ระบบบริหารจัดการโรงแรมทั้งระบบ PMS Channel Manager");
 });

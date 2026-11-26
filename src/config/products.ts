@@ -98,7 +98,7 @@ export const products: Product[] = [
     slug: "hotel",
     signupUrl: "https://hotel.tkbcon.com/#trial",
     code: "tkb-hotel",
-    fullName: "ระบบบริหารจัดการโรงแรมครบวงจร",
+    fullName: "ระบบบริหารจัดการโรงแรมทั้งระบบ PMS Channel Manager",
     shortName: "TKB Hotel",
     tagline:
       "เว็บจองห้องพัก ฟรอนต์ แม่บ้าน ราคา OTA บิลพัก และ POS ร้านอาหาร ครบในระบบเดียว ใช้งานบนคลาวด์ ลองได้ทันทีกับโรงแรมตัวอย่าง",
