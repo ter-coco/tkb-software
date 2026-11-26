@@ -9,8 +9,8 @@ test("หน้าแรก: hero การ์ด 3 ใบ และติดต
   await expect(cards.nth(0)).toContainText("TKB POS");
   await expect(cards.nth(1)).toContainText("TKB FaceScan");
   await expect(cards.nth(1).getByRole("link", { name: "ดูรายละเอียด" })).toHaveAttribute("href", "/programs/facescan");
-  await expect(cards.nth(2)).toContainText("เร็ว ๆ นี้");
-  await expect(cards.nth(2).getByRole("link", { name: /LINE/ })).toHaveAttribute("href", "https://line.me/R/ti/p/%40793lptfr");
+  await expect(cards.nth(2)).toContainText("TKB Hotel");
+  await expect(cards.nth(2).getByRole("link", { name: "ดูรายละเอียด" })).toHaveAttribute("href", "/programs/hotel");
   await expect(page.locator("#contact")).toContainText("085-977-4474");
 });
 

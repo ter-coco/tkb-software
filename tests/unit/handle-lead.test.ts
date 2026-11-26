@@ -73,9 +73,9 @@ test("userAgent ยาวเกิน 300 ถูกตัดเหลือ 300"
   await handleLead(body, "x".repeat(500), d);
   expect(inserted[0].userAgent).toHaveLength(300);
 });
-test("โปรแกรมที่ไม่มี/ยังไม่เปิด: 400 ไม่บันทึก", async () => {
+test("โปรแกรมที่ไม่มี: 400 ไม่บันทึก", async () => {
   const { d, inserted } = deps();
-  for (const product of ["hotel", "nope"]) {
+  for (const product of ["nope", "hr"]) {
     const r = await handleLead({ ...body, product }, "", d);
     expect(r.status).toBe(400);
   }

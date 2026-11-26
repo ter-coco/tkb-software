@@ -11,14 +11,16 @@ test("โปรแกรมตอนเปิดเว็บ", () => {
   expect(products.map(p => [p.slug, p.code, p.status])).toEqual([
     ["pos", "tkb-retail", "available"],
     ["facescan", "tkb-facescan", "available"],
-    ["hotel", "tkb-hotel", "coming-soon"],
+    ["hotel", "tkb-hotel", "available"],
   ]);
   expect(getProduct("pos")?.fullName).toBe("โปรแกรมร้านค้าปลีก-ขายส่งครบวงจร");
   expect(getProduct("pos")?.trialDays).toBe(15);
   expect(getProduct("facescan")?.fullName).toBe("ระบบสแกนหน้าลงเวลาพนักงาน");
   expect(getProduct("facescan")?.delivery).toBe("cloud");
+  expect(getProduct("hotel")?.delivery).toBe("cloud");
+  expect(getProduct("hotel")?.signupUrl).toBe("https://hotel.tkbcon.com/#trial");
   expect(getProduct("nope")).toBeUndefined();
-  expect(availableProducts().map(p => p.slug)).toEqual(["pos", "facescan"]);
+  expect(availableProducts().map(p => p.slug)).toEqual(["pos", "facescan", "hotel"]);
 });
 test("โปรแกรมพร้อมใช้มีจุดเด่นอย่างน้อย 6 ข้อ และภาพหน้าจอมี alt", () => {
   for (const p of availableProducts()) {

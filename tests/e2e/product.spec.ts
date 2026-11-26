@@ -55,6 +55,7 @@ test("ไม่มีแนวนอนล้นจอ", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
-test("โปรแกรมเร็ว ๆ นี้ไม่มีหน้าดาวน์โหลด", async ({ page }) => {
-  expect((await page.goto("/programs/hotel"))?.status()).toBe(404);
+test("TKB Hotel เปิดหน้ารายละเอียดแบบคลาวด์", async ({ page }) => {
+  expect((await page.goto("/programs/hotel"))?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("ระบบบริหารจัดการโรงแรมครบวงจร");
 });
